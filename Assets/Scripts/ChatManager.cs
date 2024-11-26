@@ -10,6 +10,7 @@ public class ChatManager : MonoBehaviour
     [SerializeField] private GameObject _conteudo;
     [SerializeField] private GameObject _mensagem;
     private PhotonView _photonView;
+    
 
     // Start is called before the first frame update
     void Start()
