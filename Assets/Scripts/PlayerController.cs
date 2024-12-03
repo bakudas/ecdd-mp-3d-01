@@ -97,14 +97,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             networkPosition = (Vector3)stream.ReceiveNext();
             _nickname = (string)stream.ReceiveNext();
 
-            if (photonView.IsMine)
-            {
-                _namePlayer.text = PhotonNetwork.LocalPlayer.NickName;
-            }
-            else
-            {
-                _namePlayer.text = _nickname;
-            }
+            _namePlayer.text = _nickname;
         }
 
 
