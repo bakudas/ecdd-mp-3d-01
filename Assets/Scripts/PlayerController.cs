@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+//using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private float _playerSpeed = 10f;
     private Vector3 networkPosition;
     private string _nickname;
+
+    private int _localScore;
 
     #endregion
 
@@ -51,13 +53,39 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (LocalPlayerInstance != null) { LocalPlayerInstance = this.gameObject; }
             _nickname = PhotonNetwork.LocalPlayer.NickName;
+            var score = PhotonNetwork.LocalPlayer.CustomProperties["Score"];
             _namePlayer.text = _nickname;
+            
+            photonView.RPC("UpdateScore", RpcTarget.AllBuffered, 10);
         }
         else
         {
             _namePlayer.text = _nickname;
         }
 
+    }
+
+    [PunRPC]
+    public void UpdateScore(int quantidade)
+    {
+        int scoreAtual = 0;
+
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Score"))
+        {
+            scoreAtual = (int)PhotonNetwork.LocalPlayer.CustomProperties["Score"];
+        }
+
+        scoreAtual += quantidade;
+
+        // Atualizar essa pontuação nas propriedades customizadas do jogador
+        var tabela = new ExitGames.Client.Photon.Hashtable();
+        tabela.TryAdd("Score", scoreAtual);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(tabela);
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        Debug.Log((int)PhotonNetwork.LocalPlayer.CustomProperties["Score"]);
     }
 
     // Update is called once per frame

@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class Coletaveis : MonoBehaviourPun
 {
+    [SerializeField] private int quatidade = 1;
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.gameObject.GetPhotonView().IsMine)
             return;
 
+        other.GetComponent<PlayerController>().UpdateScore(quatidade);
         photonView.RPC("DestroiItem", RpcTarget.MasterClient);
     }
 
@@ -19,6 +21,5 @@ public class Coletaveis : MonoBehaviourPun
     {
         PhotonNetwork.Destroy(this.gameObject);
     }
-
 
 }

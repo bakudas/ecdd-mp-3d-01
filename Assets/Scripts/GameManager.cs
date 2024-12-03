@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        
+        //foreach (var player in PhotonNetwork.PlayerList)
+        //{
+        //    Debug.Log(player.NickName + ": " + player.CustomProperties["Score"]);
+        //}
     }
 }

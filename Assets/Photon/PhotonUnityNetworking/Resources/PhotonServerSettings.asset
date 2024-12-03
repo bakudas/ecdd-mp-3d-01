@@ -41,6 +41,7 @@ MonoBehaviour:
   - RespawnSpaceship
   - RecebeMensagem
   - DestroiItem
+  - UpdateScore
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
