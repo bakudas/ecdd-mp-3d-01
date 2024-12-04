@@ -30,7 +30,6 @@ public class Chat : MonoBehaviour
         bloqueioMovimento.Invoke(estado);
     }
 
-
     public GameObject CriaMensagem(string texto)
     {
         GameObject mensagem = Instantiate(message, content.transform);

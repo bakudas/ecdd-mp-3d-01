@@ -29,6 +29,14 @@ public class GameManager : MonoBehaviourPunCallbacks
             PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, playerSpawnerPosition.position, Quaternion.identity);
         }
 
+        var _listPlayer = PhotonNetwork.PlayerList;
+
+        foreach (var player in _listPlayer)
+        {
+            Debug.Log(player.NickName);
+        }
+
+
     }
 
     // Update is called once per frame
