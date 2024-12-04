@@ -16,9 +16,18 @@ public class Chat : MonoBehaviour
     public Queue<GameObject> _filaMensagem = new Queue<GameObject>();
     private int _chatMensagemQtdMax = 5;
 
+    public delegate void BloqueioMovimento(bool move);
+    public BloqueioMovimento bloqueioMovimento;
+
     private void Start()
     {
         _photonView = GetComponent<PhotonView>();
+        bloqueioMovimento = PlayerController.Instance.HabilitaMovimentacao;
+    }
+
+    public void BloqueiaMovimento(bool estado)
+    {
+        bloqueioMovimento.Invoke(estado);
     }
 
 

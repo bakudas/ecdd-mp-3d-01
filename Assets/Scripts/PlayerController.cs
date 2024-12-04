@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region Private Fields
 
-    public static GameObject Instance;
+    public static PlayerController Instance;
     public static GameObject LocalPlayerInstance;
     private Rigidbody _rb;
     private TMP_Text _namePlayer;
@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private string _nickname;
 
     private int _localScore;
+
+    public bool PodeMover { get; private set; }
 
     #endregion
 
@@ -35,12 +37,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     #endregion
 
+    public void HabilitaMovimentacao(bool mover)
+    {
+        PodeMover = mover;
+    }
+
     private void Awake()
     {
-        //if (Instance == null)
-        //{
-        //    Instance = this.gameObject;
-        //}
+        if (Instance == null)
+        {
+            Instance = this;
+        }
     }
 
     // Start is called before the first frame update
@@ -55,8 +62,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             _nickname = PhotonNetwork.LocalPlayer.NickName;
             var score = PhotonNetwork.LocalPlayer.CustomProperties["Score"];
             _namePlayer.text = _nickname;
-            
-            photonView.RPC("UpdateScore", RpcTarget.AllBuffered, 10);
+            HabilitaMovimentacao(true);
         }
         else
         {
@@ -104,7 +110,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         if (photonView.IsMine)
         {
             // local player
-            _rb.velocity = Movement;
+            if (PodeMover)
+            {
+                _rb.velocity = Movement;
+            }
         }
         else
         {
