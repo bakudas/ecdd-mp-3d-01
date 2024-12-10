@@ -133,10 +133,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             networkPosition = (Vector3)stream.ReceiveNext();
             _nickname = (string)stream.ReceiveNext();
-
-            //_namePlayer.text = _nickname;
         }
-
-
     }
 }

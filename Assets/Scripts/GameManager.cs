@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject playerPrefab;
     [SerializeField] Transform playerSpawnerPosition;
 
+    [SerializeField] float levelTempo = 30f;
+    private double startTime;
+
     public void Awake()
     {
         if (Instance == null)
@@ -23,28 +26,49 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startTime = PhotonNetwork.Time;
+            ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable();
+            roomProps["StartTime"] = startTime;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
+        }
 
         if (PlayerController.LocalPlayerInstance == null)
         {
             PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, playerSpawnerPosition.position, Quaternion.identity);
         }
 
-        var _listPlayer = PhotonNetwork.PlayerList;
+    }
 
-        foreach (var player in _listPlayer)
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable customProps)
+    {
+        if (customProps.ContainsKey("StartTime"))
         {
-            Debug.Log(player.NickName);
+            startTime = (double)PhotonNetwork.CurrentRoom.CustomProperties["StartTime"];
         }
-
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        //foreach (var player in PhotonNetwork.PlayerList)
-        //{
-        //    Debug.Log(player.NickName + ": " + player.CustomProperties["Score"]);
-        //}
+        // quanto de tempo já passou
+        double tempoPassado = PhotonNetwork.Time - startTime;
+        // quanto de tempo resta para acabar o jogo
+        double tempoRestante = levelTempo - tempoPassado;
+
+        if (tempoRestante <= 0)
+        {
+            // rotina de acabar o jogo
+            GameOver();
+        }
+
+        // Atualizar a UI com o tempo de jogo
+        UIManager.Instance.UpdateTimer((float)tempoRestante);
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("ACABOU O JOGO");
     }
 }
