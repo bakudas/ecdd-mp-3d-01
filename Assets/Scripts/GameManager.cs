@@ -62,9 +62,11 @@ public class GameManager : MonoBehaviourPunCallbacks
             // rotina de acabar o jogo
             GameOver();
         }
-
-        // Atualizar a UI com o tempo de jogo
-        UIManager.Instance.UpdateTimer((float)tempoRestante);
+        else
+        {
+            // Atualizar a UI com o tempo de jogo
+            UIManager.Instance.UpdateTimer((float)tempoRestante);
+        }
     }
 
     public void GameOver()

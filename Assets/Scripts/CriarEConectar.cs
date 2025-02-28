@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Photon.Realtime;
 using System;
 using Random = UnityEngine.Random;
+using WebSocketSharp;
 
 
 public class CriarEConectar : MonoBehaviourPunCallbacks
@@ -31,6 +32,8 @@ public class CriarEConectar : MonoBehaviourPunCallbacks
         _options.MaxPlayers = 4;
         _options.IsVisible = true;
         _options.IsOpen = true;
+
+        _nickname.text = PlayFabLogin.PFL.Nickname;
     }
 
     #endregion
@@ -50,9 +53,9 @@ public class CriarEConectar : MonoBehaviourPunCallbacks
         return code;
     }
 
-    public void CriaSala()
+    public void CriaSala(string roomName = "")
     {
-        string roomName = GeraCodigo();
+        roomName = !roomName.IsNullOrEmpty() ? roomName : GeraCodigo();
 
         Debug.Log("SALA CRIADA");
 

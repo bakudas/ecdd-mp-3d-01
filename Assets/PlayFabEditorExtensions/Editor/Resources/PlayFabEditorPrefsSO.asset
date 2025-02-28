@@ -15,10 +15,10 @@ MonoBehaviour:
   DevAccountEmail: 
   DevAccountToken: 
   AadAuthorization: 
-  SelectedStudio: ECDD Vaca Roxa
-  SdkPath: Assets/PlayFabSDK
+  SelectedStudio: 
+  SdkPath: 
   EdExPath: 
   LocalCloudScriptPath: 
   PanelIsShown: 0
-  curMainMenuIdx: 1
+  curMainMenuIdx: 0
   curSubMenuIdx: 0
