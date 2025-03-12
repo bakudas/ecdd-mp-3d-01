@@ -19,7 +19,7 @@ public class PlayFabLogin : MonoBehaviour
 
     public TMP_Text statusText;
 
-    public string userEmail;
+    public string usernameOrEmail;
     public string userPassword;
     public string username;
 
@@ -61,12 +61,25 @@ public class PlayFabLogin : MonoBehaviour
         else
         {
             // credenciais para autenticação
-            userEmail = inputUserEmailLogin.text;
+            usernameOrEmail = inputUserEmailLogin.text;
             userPassword = inputUserPasswordLogin.text;
-            //payload de requisição
-            var request = new LoginWithEmailAddressRequest { Email = userEmail, Password = userPassword };
-            // Requisição
-            PlayFabClientAPI.LoginWithEmailAddress(request, SucessoLogin, FalhaLogin);
+
+            if (usernameOrEmail.Contains("@"))
+            {
+                //payload de requisição
+                var requestEmail = new LoginWithEmailAddressRequest { Email = usernameOrEmail, Password = userPassword };
+                
+                // Requisição
+                PlayFabClientAPI.LoginWithEmailAddress(requestEmail, SucessoLogin, FalhaLogin);
+            } else
+            {
+                //payload de requisição
+                var requestUsername = new LoginWithPlayFabRequest { Username = usernameOrEmail, Password = userPassword};
+
+                // Requisição
+                PlayFabClientAPI.LoginWithPlayFab(requestUsername, SucessoLogin, FalhaLogin);
+
+            }
         }
     }
 
@@ -80,11 +93,11 @@ public class PlayFabLogin : MonoBehaviour
         else
         {
             username = inputUsername.text;
-            userEmail = inputEmail.text;
+            usernameOrEmail = inputEmail.text;
             userPassword = inputPassword.text;
 
             // payload da requisição
-            var request = new RegisterPlayFabUserRequest { Email = userEmail, Password = userPassword, Username = username };
+            var request = new RegisterPlayFabUserRequest { Email = usernameOrEmail, Password = userPassword, Username = username };
             
             // Requisição
             PlayFabClientAPI.RegisterPlayFabUser(request, SucessoCriarConta, FalhaCriarConta);

@@ -8,6 +8,7 @@ using Photon.Realtime;
 using System;
 using Random = UnityEngine.Random;
 using WebSocketSharp;
+using UnityEditor.VersionControl;
 
 
 public class CriarEConectar : MonoBehaviourPunCallbacks
@@ -16,6 +17,7 @@ public class CriarEConectar : MonoBehaviourPunCallbacks
 
     [SerializeField] private TMP_InputField _nickname;
     [SerializeField] private TMP_InputField _roomID;
+    public string _roomName;
     private RoomOptions _options = new RoomOptions();
 
     #endregion
@@ -29,7 +31,7 @@ public class CriarEConectar : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        _options.MaxPlayers = 4;
+        _options.MaxPlayers = 2;
         _options.IsVisible = true;
         _options.IsOpen = true;
 
@@ -72,6 +74,18 @@ public class CriarEConectar : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(_roomID.text);
     }
 
+    public void CriarOuEntrarSala(bool isHost, string nomeSala)
+    {
+        if (isHost)
+        {
+            PhotonNetwork.CreateRoom(nomeSala, _options);
+        }
+        else { 
+            PhotonNetwork.JoinRoom(nomeSala);
+        }
+
+    }
+
     public void JoinRandomRoom()
     {
         PhotonNetwork.JoinRandomRoom();
@@ -89,9 +103,26 @@ public class CriarEConectar : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        MudaNome();
+
         Debug.Log(PhotonNetwork.CurrentRoom.Name);
 
         PhotonNetwork.LoadLevel("LobbyGame");
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log($"[PhotonNetwork] Falha ao entrar na sala, erro {returnCode}: {message}, vamos tentar novamente em 2s.");
+
+        // coroutine para ficar tentando entrar na sala
+        StartCoroutine(TentaEntrarSala(_roomName));
+    }
+
+    private IEnumerator TentaEntrarSala(string nomeSala)
+    {
+        yield return new WaitForSeconds(2f);
+        Debug.Log($"[PhotonNetwork] Tentando entrar na sala {nomeSala}");
+        PhotonNetwork.JoinRoom(nomeSala);
     }
 
     #endregion
