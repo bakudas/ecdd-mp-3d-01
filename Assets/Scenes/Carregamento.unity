@@ -1464,7 +1464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 822847057}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &545541861
@@ -3511,6 +3511,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1263870051}
   - component: {fileID: 1263870050}
+  - component: {fileID: 1263870052}
   m_Layer: 0
   m_Name: Playfab
   m_TagString: Untagged
@@ -3531,8 +3532,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Nickname: 
+  EntityID: 
+  EntityType: 
   statusText: {fileID: 551337690}
-  userEmail: 
+  usernameOrEmail: 
   userPassword: 
   username: 
   inputUserEmailLogin: {fileID: 822847059}
@@ -3557,6 +3560,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1263870052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263870049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 873eeacd0801efb4c85d8d73235ed81b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1273078673
 GameObject:
   m_ObjectHideFlags: 0

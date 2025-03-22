@@ -36,6 +36,18 @@ public class CriarEConectar : MonoBehaviourPunCallbacks
         _options.IsOpen = true;
 
         _nickname.text = PlayFabLogin.PFL.Nickname;
+
+        
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            PlayFabLeaderboard PFLeaderboard = FindObjectOfType<PlayFabLeaderboard>();
+            PFLeaderboard.UpdateLeaderboard();
+            PFLeaderboard.RecuperarLeaderboard();
+        }
     }
 
     #endregion
