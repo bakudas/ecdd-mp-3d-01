@@ -244,4 +244,21 @@ public class PlayFabLogin : MonoBehaviour
         },
         error => Debug.Log(error.ErrorMessage));
     }
+
+    private void UpdateDisplayName(string displayName)
+    {
+        PlayFabClientAPI.UpdateUserTitleDisplayName(
+            new UpdateUserTitleDisplayNameRequest
+            {
+                DisplayName = displayName
+            },
+            (UpdateUserTitleDisplayNameResult result) =>
+            {
+                Debug.Log("Display name updated.");
+            },
+            (PlayFabError error) =>
+            {
+                Debug.LogError(error.GenerateErrorReport());
+            });
+    }
 }
