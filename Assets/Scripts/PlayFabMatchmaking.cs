@@ -1,10 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using PlayFab;
 using PlayFab.MultiplayerModels;
-using System;
-using Unity.VisualScripting;
 
 public class PlayFabMatchmaking : MonoBehaviour
 {
@@ -21,7 +18,7 @@ public class PlayFabMatchmaking : MonoBehaviour
     {
         Debug.Log("[Matchmaker] Começando o emparalhamento!");
 
-        entityId = PlayFabLogin.PFL.EntityID;
+        entityId = PlayFabLogin.Instance.EntityID;
 
         CreateMatchmakingTicket(entityId);
     }

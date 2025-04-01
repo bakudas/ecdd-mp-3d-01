@@ -1,7 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -51,5 +50,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.LoadLevel("GameScene");
         }
+    }
+
+    public void GoBack()
+    {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel("CreateGame");
     }
 }

@@ -2219,7 +2219,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1263870050}
         m_TargetAssemblyTypeName: PlayFabLogin, Assembly-CSharp
-        m_MethodName: CriarConta
+        m_MethodName: Register
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3511,7 +3511,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1263870051}
   - component: {fileID: 1263870050}
-  - component: {fileID: 1263870052}
   m_Layer: 0
   m_Name: Playfab
   m_TagString: Untagged
@@ -3531,20 +3530,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0f916cd8143ab74bae854e51ca2a389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Nickname: 
-  EntityID: 
-  EntityType: 
+  loadManager: {fileID: 348321463}
+  loginPanel: {fileID: 1744181587}
   statusText: {fileID: 551337690}
-  usernameOrEmail: 
-  userPassword: 
-  username: 
   inputUserEmailLogin: {fileID: 822847059}
   inputUserPasswordLogin: {fileID: 1759345222}
   inputUsername: {fileID: 111744052}
   inputEmail: {fileID: 2089006175}
   inputPassword: {fileID: 752401186}
-  loginPanel: {fileID: 1744181587}
-  loadManager: {fileID: 348321463}
+  EntityID: 
+  EntityType: 
+  Nickname: 
 --- !u!4 &1263870051
 Transform:
   m_ObjectHideFlags: 0
@@ -3560,18 +3556,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1263870052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263870049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 873eeacd0801efb4c85d8d73235ed81b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1273078673
 GameObject:
   m_ObjectHideFlags: 0

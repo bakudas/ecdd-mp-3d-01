@@ -1,76 +1,108 @@
-using Photon.Pun;
-using Photon.Realtime;
-using System.Collections;
+﻿using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-
     public static GameManager Instance;
-    [SerializeField] GameObject playerPrefab;
-    [SerializeField] Transform playerSpawnerPosition;
 
-    [SerializeField] float levelTempo = 30f;
-    private double startTime;
+    [Header("Player Config")]
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private Transform[] playerSpawnerPosition;
 
-    public void Awake()
+    [Header("Game Timer")]
+    [SerializeField] private float levelTempo = 30f; // tempo total da rodada
+    private double startTime; // tempo em que o jogo começou
+    
+    private Dictionary<int, int> teamScores = new Dictionary<int, int>();
+
+    private void Awake()
     {
-        if (Instance == null)
+        if (Instance == null) Instance = this;
+
+        // Inicializa os scores dos times (até 4 jogadores)
+        for (int i = 1; i <= 4; i++)
         {
-            Instance = this;
+            teamScores[i] = 0;
         }
     }
 
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         if (PhotonNetwork.IsMasterClient)
         {
             startTime = PhotonNetwork.Time;
-            ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable();
-            roomProps["StartTime"] = startTime;
+            var roomProps = new ExitGames.Client.Photon.Hashtable
+        {
+            { "StartTime", startTime }
+        };
             PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
         }
 
-        if (PlayerController.LocalPlayerInstance == null)
+        SpawnLocalPlayer();
+    }
+
+    private void SpawnLocalPlayer()
+    {
+        int actorIndex = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+
+        // Garante que não ultrapassamos o número de pontos de spawn
+        Vector3 spawnPosition;
+        if (actorIndex < playerSpawnerPosition.Length)
         {
-            PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, playerSpawnerPosition.position, Quaternion.identity);
+            spawnPosition = playerSpawnerPosition[actorIndex].position;
+        }
+        else
+        {
+            // Fallback: pega posição aleatória disponível
+            int randomIndex = UnityEngine.Random.Range(0, playerSpawnerPosition.Length);
+            spawnPosition = playerSpawnerPosition[randomIndex].position;
+            Debug.LogWarning($"Não há spawn específico para o jogador {actorIndex + 1}. Usando posição aleatória.");
         }
 
+        PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, spawnPosition, Quaternion.identity);
     }
+
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable customProps)
     {
-        if (customProps.ContainsKey("StartTime"))
+        if (customProps.TryGetValue("StartTime", out object startTimeFromProps))
         {
-            startTime = (double)PhotonNetwork.CurrentRoom.CustomProperties["StartTime"];
+            startTime = (double)startTimeFromProps;
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RegisterKill(int killerTeamId)
     {
-        // quanto de tempo j� passou
+        if (teamScores.ContainsKey(killerTeamId))
+            teamScores[killerTeamId]++;
+
+        Debug.Log($"[SCORE] Time {killerTeamId}: {teamScores[killerTeamId]} pontos");
+
+        // Atualiza UI de score se necessário
+        //ScoreUI.Instance?.UpdateTeamScore(killerTeamId, teamScores[killerTeamId]);
+    }
+
+    private void Update()
+    {
+        if (PhotonNetwork.CurrentRoom == null || !PhotonNetwork.InRoom) return;
+
         double tempoPassado = PhotonNetwork.Time - startTime;
-        // quanto de tempo resta para acabar o jogo
         double tempoRestante = levelTempo - tempoPassado;
 
         if (tempoRestante <= 0)
         {
-            // rotina de acabar o jogo
             GameOver();
         }
         else
         {
-            // Atualizar a UI com o tempo de jogo
-            UIManager.Instance.UpdateTimer((float)tempoRestante);
+            UIManager.Instance?.UpdateTimer((float)tempoRestante);
         }
     }
 
     public void GameOver()
     {
-        Debug.Log("ACABOU O JOGO");
+        Debug.Log("⏰ Fim de jogo!");
+        // Aqui você pode chamar lógica de fim de jogo, mostrar painel de resultados, etc.
     }
 }

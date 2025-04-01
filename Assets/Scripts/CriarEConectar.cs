@@ -1,14 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
-using UnityEngine.UI;
 using Photon.Realtime;
-using System;
-using Random = UnityEngine.Random;
 using WebSocketSharp;
-using UnityEditor.VersionControl;
 
 
 public class CriarEConectar : MonoBehaviourPunCallbacks
@@ -31,11 +26,11 @@ public class CriarEConectar : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        _options.MaxPlayers = 2;
+        _options.MaxPlayers = 4;
         _options.IsVisible = true;
         _options.IsOpen = true;
 
-        _nickname.text = PlayFabLogin.PFL.Nickname;
+        _nickname.text = PlayFabLogin.Instance.Nickname;
 
         
     }
